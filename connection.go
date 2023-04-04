@@ -2,6 +2,8 @@ package opc
 
 import (
 	"time"
+
+	ole "github.com/go-ole/go-ole"
 )
 
 const (
@@ -38,25 +40,26 @@ const (
 	OPCTest int32 = 5
 )
 
-//Connection represents the interface for the connection to the OPC server.
+// Connection represents the interface for the connection to the OPC server.
 type Connection interface {
 	Add(...string) error
 	Remove(string)
 	Read() map[string]Item
 	ReadItem(string) Item
+	ReadVariant(string, ole.VT) Item
 	Tags() []string
 	Write(string, interface{}) error
 	Close()
 }
 
-//Item stores the result of an OPC item from the OPC server.
+// Item stores the result of an OPC item from the OPC server.
 type Item struct {
 	Value     interface{}
 	Quality   int16
 	Timestamp time.Time
 }
 
-//Good checks the quality of the Item
+// Good checks the quality of the Item
 func (i *Item) Good() bool {
 	if i.Quality == OPCQualityGood || i.Quality == OPCQualityGoodButForced {
 		return true
