@@ -217,18 +217,18 @@ func (ao *AutomationObject) Close() {
 	}
 }
 
+var Wrappers = []string{
+	"OPC.Automation.1",
+	"OPC.SiemensDAAuto.1",
+	"Graybox.OPC.DAWrapper.1",
+	"Matrikon.OPC.Automation.1",
+}
+
 // NewAutomationObject connects to the COM object based on available wrappers.
 func NewAutomationObject() *AutomationObject {
-	// TODO: list should not be hard-coded
-	wrappers := []string{
-		"OPC.Automation.1",
-		"OPC.SiemensDAAuto.1",
-		"Graybox.OPC.DAWrapper.1",
-		"Matrikon.OPC.Automation.1",
-	}
 	var err error
 	var unknown *ole.IUnknown
-	for _, wrapper := range wrappers {
+	for _, wrapper := range Wrappers {
 		unknown, err = oleutil.CreateObject(wrapper)
 		if err == nil {
 			logger.Println("Loaded OPC Automation object with wrapper", wrapper)
